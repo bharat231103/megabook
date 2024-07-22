@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<!-- Posts -->
+<div class="container">
+    {% for message in messages %}
+    <div class="alert alert-success d-flex align-items-center" role="alert">
+        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 48">
+            check_circle
+        </span>
+        <div>
+            {{message}}
+        </div>
+    </div>
+    {% endfor %}
+
+    <!-- {{user_like_post}} <br>
+    {% for i in user_like_post %}
+    {{i.post_id}}
+    {% endfor %} -->
+    <!-- {{like_list}} -->
+
+    <div class="row my-5">
+        <div class="col-0 col-sm-3"></div>
+        <div class="container col-10 col-sm-5 ">
+            <!-- Card -->
+
+            {% for post in posts %}
+            <div class="card my-2 ">
+                <div class="card-body">
+                    <!-- <a href="/user/{{post.user}}"><img src="{% static 'assets/GolfBall.png'%}"  alt="" srcset=""
+                            class="dp-logo"></a> -->
+
+
+                    <!-- <a href="/user/{{post.user}}"><img src="{{user_profile.dp}}" alt="" srcset=""
+                            class="dp-logo"></a> -->
+
+                    <h5 class="card-title d-inline"><a href="profile?user={{post.user}}"
+                            style="text-decoration: none; color:black;">@{{post.user}}</a> </h5>
+                    <p class="card-text ms-0"><small class="text-muted">{{post.created_at | date}}</small></p>
+                </div>
+                <a href="?id={{post.id}}">
+                    <img src="{{post.image.url}}" class="card-img-bottom" alt="...">
+                </a>
+                <div class="card-body">
+
+                    <p class="card-text">{{post.caption}}</p>
+                </div>
+                <div class="card-bottom">
+                    <div class="card-feature p-2 d-flex justify-content-between">
+                        <div class="like d-flex justify-content-around gap-2">
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div>
+                                    <form action="like-post" method="post">
+                                        {% csrf_token %}
+                                        <!-- <a href="like-post?id={{post.id}}" class="" style="text-decoration: none; color: black;"> -->
+                                        <input type="text" name="post_id" id="" value="{{post.id}}" readonly hidden>
+                                        <span class="material-symbols-outlined">
+                                            <button type="submit"
+                                                style="background-color: white; border:none;">favorite</button>
+                                        </span>
+                                        <!-- </a> -->
+                                    </form>
+                                </div>
+                                <div>
+                                    <p>{% if post.no_of_likes == 0 %}Like{% else %}{{post.no_of_likes}} Like{% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div>
+                                    <a href="/like-post?id={{post.id}}" class=""
+                                        style="text-decoration: none; color: black;">
+                                        <span class="material-symbols-outlined">
+                                            comment
+                                        </span>
+                                    </a>
+                                </div>
+                                <div>
+                                    <p style="text-align: center;">comment</p>
+                                </div>
+                            </div>
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                <div>
+                                    <a href="/like-post?id={{post.id}}" class=""
+                                        style="text-decoration: none; color: black;">
+                                        <span class="material-symbols-outlined">
+                                            send
+                                        </span>
+                                    </a>
+                                </div>
+                                <div>
+                                    <p style="text-align: center;">share</p>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="bookmark">
+                            <span class="material-symbols-outlined">
+                                bookmark
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {% endfor %}
+
+            <!-- 
+            <div class="card my-2 ">
+                <div class="card-body">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+                <img src="..." class="card-img-bottom" alt="...">
+            </div>-->
+        </div>
+        <div class="container d-none d-sm-block col-sm-4 my-2">
+            <div class="card" style="width: 18rem;">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item "><center><b>Following</b></center></li>
+                    {% for user in following_user_list %}
+                    <li class="list-group-item"><a href="/profile/?user={{user.0.username}}" style="text-decoration: none; color:black;"><img src="{{user.1.dp.url}}" alt="" srcset="" class="dp-logo" style="border:1px solid black"> {{user.0.first_name}} {{user.0.last_name}}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
